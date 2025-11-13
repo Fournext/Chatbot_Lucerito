@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "chatbot_lucerito": {
+    "chatbot_Lucerito": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -23,12 +23,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -58,10 +53,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "chatbot_lucerito:build:production"
+              "buildTarget": "chatbot_Lucerito:build:production"
             },
             "development": {
-              "buildTarget": "chatbot_lucerito:build:development"
+              "buildTarget": "chatbot_Lucerito:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,5 +81,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "a6b90e6d-e8b8-4012-a26e-e3c0bbec07bc"
   }
 }
