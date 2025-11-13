@@ -30,7 +30,7 @@ export class Order {
   }
 
   pagar() {
-    alert('✅ Pedido confirmado correctamente');
+    this.router.navigate(['/datos-envio']);
   }
 
   // Aumenta la cantidad de un item en la orden

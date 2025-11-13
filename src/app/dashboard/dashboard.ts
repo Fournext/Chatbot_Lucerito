@@ -59,17 +59,6 @@ export class Dashboard {
     this.cart.addFromMenu(item, 1);
   }
 
-  goBack(): void {
-    try {
-      if (history.length > 1) {
-        history.back();
-      } else {
-        this.router.navigate(['/dashboard']);
-      }
-    } catch (e) {
-      this.router.navigate(['/dashboard']);
-    }
-  }
 
   verOrden(): void {
     this.router.navigate(['/order']);

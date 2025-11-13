@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="flex items-center justify-between px-4 py-3">
+
+            <!-- Back button -->
+            <button (click)="goBack()" class="text-gray-700 hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <h1 class="text-lg font-semibold text-gray-900">Datos de Pago</h1>
+
+            <!-- CHECK SAVE -->
+            <button (click)="handleSubmit()" [disabled]="!isFormValid" [class.opacity-50]="!isFormValid"
+                class="text-gray-700 hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-1 px-4 pt-4 pb-6 overflow-y-auto">
+        <div class="space-y-5">
+
+            <!-- TARJETA DE PAGO -->
+            <div class="bg-white rounded-2xl shadow-sm p-4">
+                <h2 class="text-base font-semibold text-gray-900 mb-3">Tarjeta de pago</h2>
+
+                <div class="space-y-3">
+
+                    <input type="text" placeholder="Número de tarjeta" [(ngModel)]="formData.numeroTarjeta"
+                        name="numeroTarjeta" inputmode="numeric" pattern="[0-9 ]*" maxlength="23"
+                        (input)="onCardNumberInput($event)"
+                        class="w-full px-3 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="numeroTarjetaError" class="text-red-600 text-sm mt-1">{{ numeroTarjetaError }}</div>
+
+                    <input type="text" placeholder="MM/AA" [(ngModel)]="formData.fechaExp" name="fechaExp" maxlength="5"
+                        inputmode="numeric" pattern="[0-9/]*" (input)="onFechaInput($event)"
+                        class="w-full px-3 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="fechaExpError" class="text-red-600 text-sm mt-1">{{ fechaExpError }}</div>
+
+                    <input type="text" placeholder="Nombre Completo" [(ngModel)]="formData.nombreTarjeta"
+                        name="nombreTarjeta"
+                        class="w-full px-3 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="nombreTarjetaError" class="text-red-600 text-sm mt-1">{{ nombreTarjetaError }}</div>
+
+                    <input type="text" placeholder="Código de Seguridad (CVV)" [(ngModel)]="formData.cvv" name="cvv"
+                        maxlength="4" inputmode="numeric" pattern="[0-9]*" (input)="onCvvInput($event)"
+                        class="w-full px-3 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="cvvError" class="text-red-600 text-sm mt-1">{{ cvvError }}</div>
+
+                </div>
+            </div>
+
+            <!-- DIRECCIÓN DE FACTURACIÓN -->
+            <div class="bg-white rounded-2xl shadow-sm p-4">
+                <h2 class="text-base font-semibold text-gray-900 mb-3">Dirección de facturación</h2>
+
+                <div class="space-y-3">
+
+                    <input type="text" placeholder="País" [(ngModel)]="formData.pais" name="pais"
+                        class="w-full px-3 py-3 border border-gray-200 text-gray-900 rounded-xl placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="paisError" class="text-red-600 text-sm mt-1">{{ paisError }}</div>
+
+                    <input type="text" placeholder="Código postal" [(ngModel)]="formData.codigoPostal"
+                        name="codigoPostal"
+                        class="w-full px-3 py-3 border border-gray-200 text-gray-900 rounded-xl placeholder-gray-500 focus:outline-none" />
+                    <div *ngIf="codigoPostalError" class="text-red-600 text-sm mt-1">{{ codigoPostalError }}</div>
+
+                </div>
+            </div>
+
+            <!-- SWITCH GUARDAR DATOS -->
+            <div class="bg-white rounded-2xl shadow-sm p-4 flex items-center justify-between mt-4">
+                <span class="text-gray-700 font-medium">Guardar datos de pagos</span>
+
+                <button (click)="toggleGuardar()"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+                    [class.bg-green-500]="formData.guardar" [class.bg-gray-300]="!formData.guardar">
+                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                        [class.translate-x-6]="formData.guardar" [class.translate-x-1]="!formData.guardar"></span>
+                </button>
+            </div>
+
+        </div>
+    </main>
+</div>

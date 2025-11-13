@@ -2,23 +2,14 @@
   <!-- Header -->
   <header class="bg-white shadow-sm sticky top-0 z-10">
     <div class="flex items-center justify-between px-4 py-3">
-      <!-- Back button -->
-      <button (click)="goBack()" class="text-gray-700 hover:text-gray-900">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </button>
+      <!-- No back button on dashboard (home). Keep spacer for layout -->
+      <div class="w-6 h-6" aria-hidden="true"></div>
 
       <!-- Title -->
       <h1 class="text-lg font-semibold text-gray-900">Kjaras Lucerito</h1>
 
-      <!-- Menu button -->
-      <button class="text-gray-700 hover:text-gray-900">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-        </svg>
-      </button>
+      <!-- Menu button removed. Add spacer to keep title centered -->
+      <div class="w-6 h-6" aria-hidden="true"></div>
     </div>
   </header>
 
