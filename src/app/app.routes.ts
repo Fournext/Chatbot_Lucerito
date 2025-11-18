@@ -4,11 +4,13 @@ import { FormDatosEnvio } from './form-datos-envio/form-datos-envio';
 import { DatosTarjeta } from './datos-tarjeta/datos-tarjeta';
 import { Order } from './order/order';
 import { Caja } from './caja/caja';
+import { PagoQR } from './pago-qr/pago-qr';
 
 export const routes: Routes = [
 	{ path: 'dashboard', component: Dashboard },
 	{ path: 'order', component: Order },
 	{ path: 'datos-envio', component: FormDatosEnvio },
+	{ path: 'pago-qr', component: PagoQR },
     { path: 'datos-tarjeta', component: DatosTarjeta },
 	{ path: 'caja', component: Caja },
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },

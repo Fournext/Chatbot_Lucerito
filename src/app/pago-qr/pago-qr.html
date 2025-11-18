@@ -1,0 +1,135 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="flex items-center justify-between px-4 py-3">
+            
+            <!-- Back button -->
+            <button (click)="goBack()" class="text-gray-700 hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <h1 class="text-lg font-semibold text-gray-900">Pago con QR</h1>
+
+            <!-- Espacio para mantener balance -->
+            <div class="w-6 h-6" aria-hidden="true"></div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 px-4 pt-6 pb-6 overflow-y-auto">
+        
+        <!-- Información del Pedido -->
+        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
+            <div class="text-center">
+                <h2 class="text-lg font-semibold text-gray-900 mb-2">Resumen del Pedido</h2>
+                <p class="text-gray-600 text-sm">Kjaras Lucerito</p>
+                <p class="text-2xl font-bold text-green-600 mt-2">{{ total }} Bs</p>
+                <p class="text-xs text-gray-500 mt-1">Incluye envío</p>
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <div class="text-center">
+                <h3 class="text-base font-semibold text-gray-900 mb-4">Escanea el código QR para pagar</h3>
+                
+                <!-- Contenedor del QR -->
+                <div class="flex justify-center mb-4">
+                    <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
+                        <qrcode 
+                            [qrdata]="qrData" 
+                            [width]="240" 
+                            [errorCorrectionLevel]="'M'"
+                            [elementType]="'svg'"
+                            [colorDark]="'#000000'"
+                            [colorLight]="'#FFFFFF'"
+                            [margin]="4">
+                        </qrcode>
+                    </div>
+                </div>
+
+                <!-- Instrucciones -->
+                <div class="space-y-2 text-sm text-gray-600">
+                    <p>📱 Abre tu app de banca móvil</p>
+                    <p>🔍 Escanea el código QR</p>
+                    <p>💳 Confirma el pago de <strong>{{ total }} Bs</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de la Transacción -->
+        <div class="bg-white rounded-2xl shadow-sm p-4">
+            <h3 class="text-base font-semibold text-gray-900 mb-3">Detalles de la Transacción</h3>
+            
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Número de pedido:</span>
+                    <span class="font-medium">{{ pedidoNumero }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Subtotal:</span>
+                    <span>{{ subtotal }} Bs</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Envío:</span>
+                    <span>{{ envio }} Bs</span>
+                </div>
+                <div class="flex justify-between border-t border-gray-200 pt-2">
+                    <span class="text-gray-900 font-semibold">Total:</span>
+                    <span class="text-gray-900 font-semibold">{{ total }} Bs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado del Pago -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mt-4">
+            <div class="flex items-center justify-center">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-600 mr-3"></div>
+                <span class="text-yellow-800 font-medium">Esperando confirmación de pago...</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Botones de Acción -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
+        <div class="space-y-3">
+            <button (click)="simularPagoExitoso()"
+                class="w-full bg-green-500 text-white font-bold py-4 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-lg">
+                Simular Pago Exitoso
+            </button>
+            
+            <button (click)="cancelarPago()"
+                class="w-full bg-gray-200 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-300 active:scale-95 transition-all">
+                Cancelar Pago
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Popup de Pago Exitoso (igual al de Caja) -->
+@if (showPopup) {
+<div
+    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-xl p-8 text-center animate-[fadeIn_0.3s_ease-out]">
+        <div class="mx-auto w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">¡Pago Exitoso!</h2>
+        <p class="text-gray-600 text-sm mb-4">Tu pedido ha sido confirmado correctamente 🎉</p>
+        <div class="flex justify-center">
+            <button (click)="finalizarPago()"
+                class="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition-colors">
+                Continuar
+            </button>
+        </div>
+    </div>
+</div>
+}

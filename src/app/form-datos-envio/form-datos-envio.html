@@ -13,11 +13,11 @@
 
             <h1 class="text-lg font-semibold text-gray-900">Datos de Envío</h1>
 
-            <!-- SAVE / NEXT -->
-            <button (click)="handleSubmit()" [disabled]="!isTelefonoValid()" [class.opacity-50]="!isTelefonoValid()"
-                class="text-gray-700 hover:text-gray-900">
+            <!-- Botón para abrir modal de métodos de pago -->
+            <button (click)="openPaymentModal()" class="text-gray-700 hover:text-gray-900">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 4v16m8-8H4"/>
                 </svg>
             </button>
         </div>
@@ -97,4 +97,44 @@
 
         </div>
     </main>
+
+    <!-- Modal de Métodos de Pago -->
+    <div *ngIf="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6">
+            <!-- Título del Modal -->
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Método de Pago</h2>
+                <p class="text-gray-600 text-sm mt-1">Selecciona cómo deseas pagar</p>
+            </div>
+
+            <!-- Botones de Métodos de Pago -->
+            <div class="space-y-3">
+                <!-- Botón Pago con QR -->
+                <button (click)="selectQRPayment()"
+                    class="w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-xl hover:bg-yellow-500 active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Pago con QR
+                </button>
+
+                <!-- Botón Pago con Tarjeta -->
+                <button (click)="selectCardPayment()"
+                    class="w-full bg-green-500 text-white font-semibold py-4 rounded-xl hover:bg-green-600 active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    </svg>
+                    Pago con Tarjeta
+                </button>
+            </div>
+
+            <!-- Botón Cancelar -->
+            <button (click)="closePaymentModal()"
+                class="w-full mt-4 bg-gray-200 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-300 active:scale-95 transition-all">
+                Cancelar
+            </button>
+        </div>
+    </div>
 </div>

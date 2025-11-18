@@ -21,6 +21,10 @@ export class FormDatosEnvio {
       }
     }
   }
+
+  // Control del modal
+  showPaymentModal: boolean = false;
+
   formData = {
     direccion1: '',
     direccion2: '',
@@ -35,6 +39,31 @@ export class FormDatosEnvio {
   // Campo auxiliar para solo el número sin 591
   telefonoInput: string = '';
   telefonoError: string | null = null;
+
+  // Métodos para el modal
+  openPaymentModal(): void {
+    this.showPaymentModal = true;
+  }
+
+  closePaymentModal(): void {
+    this.showPaymentModal = false;
+  }
+
+  selectQRPayment(): void {
+    // Guarda los datos de envío y redirige a pago-qr
+    this.checkout.setPaymentMethod('qr');
+    this.checkout.setShipping(this.formData);
+    this.closePaymentModal();
+    this.router.navigate(['/caja']);
+  }
+
+  selectCardPayment(): void {
+    // Guarda los datos de envío y redirige a datos-tarjeta
+    this.checkout.setPaymentMethod('tarjeta');
+    this.checkout.setShipping(this.formData);
+    this.closePaymentModal();
+    this.router.navigate(['/datos-tarjeta']);
+  }
 
   onTelefonoChange(value: string) {
     this.telefonoInput = value.replace(/\s+/g, '');
@@ -73,15 +102,14 @@ export class FormDatosEnvio {
     this.formData.guardarDatos = !this.formData.guardarDatos;
   }
 
+  // Este método ya no se usa desde el template, pero lo mantengo por si acaso
   handleSubmit() {
-    // save shipping data to checkout service then navigate
-    this.checkout.setShipping(this.formData);
-    this.router.navigate(['/datos-tarjeta']);
+    // Ahora este método abre el modal en lugar de navegar directamente
+    this.openPaymentModal();
   }
 
-  guardar(){
-
-    
+  guardar() {
+    // Método existente - mantener por compatibilidad
   }
 
   goBack() {
