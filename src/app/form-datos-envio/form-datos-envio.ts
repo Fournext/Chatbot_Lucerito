@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CheckoutService } from '../services/checkout.service';
+import { ShippingData } from '../../interface/envio';
 
 @Component({
   selector: 'app-form-datos-envio',
@@ -25,16 +26,7 @@ export class FormDatosEnvio {
   // Control del modal
   showPaymentModal: boolean = false;
 
-  formData = {
-    direccion1: '',
-    direccion2: '',
-    ciudad: '',
-    region: '',
-    nombreCompleto: '',
-    telefono: '591',
-    guardarDatos: true,
-    comentario: ''
-  };
+  formData: ShippingData = {};
 
   // Campo auxiliar para solo el número sin 591
   telefonoInput: string = '';

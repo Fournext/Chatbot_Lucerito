@@ -6,6 +6,7 @@ export interface ShippingData {
   pais?: string;
   codigoPostal?: string;
   nombreCompleto?: string;
-  telefono?: string;
+  telefono?: '591' | string;
   comentario?: string;
+  guardarDatos?: boolean;
 }

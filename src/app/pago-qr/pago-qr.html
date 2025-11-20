@@ -1,9 +1,9 @@
 <div class="min-h-screen bg-gray-100 flex flex-col">
-    
+
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-10">
         <div class="flex items-center justify-between px-4 py-3">
-            
+
             <!-- Back button -->
             <button (click)="goBack()" class="text-gray-700 hover:text-gray-900">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
 
     <!-- Contenido Principal -->
     <main class="flex-1 px-4 pt-6 pb-6 overflow-y-auto">
-        
+
         <!-- Información del Pedido -->
         <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
             <div class="text-center">
@@ -35,18 +35,12 @@
         <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <div class="text-center">
                 <h3 class="text-base font-semibold text-gray-900 mb-4">Escanea el código QR para pagar</h3>
-                
+
                 <!-- Contenedor del QR -->
                 <div class="flex justify-center mb-4">
                     <div class="bg-white p-4 rounded-xl border-2 border-gray-200">
-                        <qrcode 
-                            [qrdata]="qrData" 
-                            [width]="240" 
-                            [errorCorrectionLevel]="'M'"
-                            [elementType]="'svg'"
-                            [colorDark]="'#000000'"
-                            [colorLight]="'#FFFFFF'"
-                            [margin]="4">
+                        <qrcode [qrdata]="qrData" [width]="240" [errorCorrectionLevel]="'M'" [elementType]="'svg'"
+                            [colorDark]="'#000000'" [colorLight]="'#FFFFFF'" [margin]="4">
                         </qrcode>
                     </div>
                 </div>
@@ -63,7 +57,7 @@
         <!-- Información de la Transacción -->
         <div class="bg-white rounded-2xl shadow-sm p-4">
             <h3 class="text-base font-semibold text-gray-900 mb-3">Detalles de la Transacción</h3>
-            
+
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
                     <span class="text-gray-600">Número de pedido:</span>
@@ -99,9 +93,9 @@
         <div class="space-y-3">
             <button (click)="simularPagoExitoso()"
                 class="w-full bg-green-500 text-white font-bold py-4 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-lg">
-                Simular Pago Exitoso
+                Ya realice el Pago
             </button>
-            
+
             <button (click)="cancelarPago()"
                 class="w-full bg-gray-200 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-300 active:scale-95 transition-all">
                 Cancelar Pago

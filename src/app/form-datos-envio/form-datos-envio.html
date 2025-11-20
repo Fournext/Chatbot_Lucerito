@@ -16,8 +16,7 @@
             <!-- Botón para abrir modal de métodos de pago -->
             <button (click)="openPaymentModal()" class="text-gray-700 hover:text-gray-900">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M12 4v16m8-8H4"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
             </button>
         </div>
@@ -99,7 +98,8 @@
     </main>
 
     <!-- Modal de Métodos de Pago -->
-    <div *ngIf="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div *ngIf="showPaymentModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm p-6">
             <!-- Título del Modal -->
             <div class="text-center mb-6">
@@ -113,8 +113,7 @@
                 <button (click)="selectQRPayment()"
                     class="w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-xl hover:bg-yellow-500 active:scale-95 transition-all flex items-center justify-center gap-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M12 4v16m8-8H4"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
                     Pago con QR
                 </button>
@@ -123,8 +122,8 @@
                 <button (click)="selectCardPayment()"
                     class="w-full bg-green-500 text-white font-semibold py-4 rounded-xl hover:bg-green-600 active:scale-95 transition-all flex items-center justify-center gap-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
                     Pago con Tarjeta
                 </button>
