@@ -8,6 +8,7 @@ import { User } from '../../interface/user';
 import { UserService } from '../services/user.service';
 import { SendPaymentService } from '../services/send-payment.service';
 import { SendMessageService } from '../services/send-message.service';
+import { ShippingData } from '../../interface/envio';
 
 @Component({
   selector: 'app-pago-qr',
@@ -27,6 +28,7 @@ export class PagoQR implements OnInit {
 
   // Datos para el QR
   qrData: string = '';
+  formData: ShippingData = {};
   
   // Información del pedido
   pedidoNumero: string = '#QR-' + Math.floor(1000 + Math.random() * 9000);
@@ -53,11 +55,9 @@ export class PagoQR implements OnInit {
       // Datos de prueba para desarrollo local
       this.chatId = 'test_user';
       this.usuario = {
-        username: 'test_user',
-        password: 'test_user',
-        tipo_usuario: 'cliente'
+        chat_id: 'test_user',
       };
-      this.userService.ensureUser('test_user', this.usuario).subscribe({
+      this.userService.createUser(this.usuario).subscribe({
         next: () => console.log('✅ Id obtenido (modo prueba)'),
         error: err => console.error('❌ Error al obtener productos:', err)
       });
@@ -80,12 +80,10 @@ export class PagoQR implements OnInit {
     
     this.chatId = chatId.toString();
     this.usuario = {
-      username: chatId.toString(),
-      password: chatId.toString(),
-      tipo_usuario: 'cliente'
+      chat_id: chatId.toString(),
     };
     
-    this.userService.ensureUser(chatId.toString(), this.usuario).subscribe({
+    this.userService.createUser(this.usuario).subscribe({
       next: () => console.log('✅ Id obtenido'),
       error: err => console.error('❌ Error al obtener usuario:', err)
     });
@@ -110,6 +108,26 @@ export class PagoQR implements OnInit {
         next: () => console.log(`✅ Detalle ${index + 1}/${this.cart.items.length} enviado:`, item.name),
         error: err => console.error(`❌ Error enviando detalle para ${item.name}:`, err)
       });
+    });
+  }
+
+  enviarDatosEnvio() {
+    this.formData = this.checkout.shipping;  
+    this.formData.user_telegram_id = this.userService.userid()?.toString() || '';
+    this.formData.ciudad = 'Sanata Cruz';
+    this.formData.region = 'Santa Cruz';
+    this.formData.pais = 'Bolivia';
+    this.formData.codigo_postal = '0000';
+    console.log('Datos de envío a enviar:', this.formData);
+    const ordenCod = this.sendPaymentService.ordercod();
+    this.formData.orden_id = ordenCod ? ordenCod : undefined;
+    if (!ordenCod) {
+      console.error('❌ No se pudo obtener el código de orden');
+      return;
+    }
+    this.sendPaymentService.createShipping(this.formData, ordenCod).subscribe({
+      next: () => console.log('✅ Datos de envío enviados'),
+      error: err => console.error('❌ Error enviando datos de envío:', err)
     });
   }
   
@@ -160,15 +178,15 @@ export class PagoQR implements OnInit {
       alert('Error: No se pudo obtener el ID de usuario.');
       return;
     }
-    
+
     this.sendPaymentService.createOrder({
-      usuario_id: userId,
+      user_telegram_id: userId,
       estado: 'pendiente',
     }).subscribe({
       next: () => {
         console.log('✅ Orden creada');
         this.enviarDetallesOrden();
-        
+        this.enviarDatosEnvio();
         // Enviar mensaje a Telegram con el resumen del pedido
         if (this.chatId) {
           this.sendMessageService.sendOrderMessage(

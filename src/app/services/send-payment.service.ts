@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { tap } from 'rxjs';
+import { ShippingData } from '../../interface/envio';
 
 @Injectable({
   providedIn: 'root',
@@ -27,4 +28,12 @@ export class SendPaymentService {
       }) 
     );
   }
+
+  createShipping(shippingData: ShippingData, ordercod: number) {
+    return this.http.post<any>(`${this.API}/datos-envio/`, shippingData).pipe(
+      tap((response: any) => {
+        //console.log('Envio de orden creado:', response);
+      }) 
+    );
+  }          
 }

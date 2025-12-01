@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CheckoutService } from '../services/checkout.service';
 import { ShippingData } from '../../interface/envio';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-form-datos-envio',
@@ -11,8 +12,13 @@ import { ShippingData } from '../../interface/envio';
   templateUrl: './form-datos-envio.html',
   styleUrl: './form-datos-envio.css',
 })
-export class FormDatosEnvio {
-  constructor(private router: Router, private checkout: CheckoutService) {
+export class FormDatosEnvio implements OnInit, AfterViewInit, OnDestroy {
+  constructor(
+    private router: Router, 
+    private checkout: CheckoutService, 
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
     // preload form with any saved shipping data
     if (this.checkout.shipping) {
       this.formData = { ...this.formData, ...this.checkout.shipping };
@@ -22,6 +28,18 @@ export class FormDatosEnvio {
       }
     }
   }
+  ngOnInit(): void {
+    this.getUserLocation();
+  }
+
+
+  // Mapa de Leaflet
+  lat = -16.5;  // posición por defecto (La Paz, Bolivia)
+  lng = -68.15;
+  zoom = 16;
+  
+  private map!: L.Map;
+  private marker!: L.Marker; 
 
   // Control del modal
   showPaymentModal: boolean = false;
@@ -32,13 +50,58 @@ export class FormDatosEnvio {
   telefonoInput: string = '';
   telefonoError: string | null = null;
 
+  // Control de notificación de error
+  showErrorNotification: boolean = false;
+  errorNotificationMessage: string = '';
+
   // Métodos para el modal
   openPaymentModal(): void {
+    // Validar que todos los campos requeridos estén llenos
+    if (!this.validateForm()) {
+      return;
+    }
     this.showPaymentModal = true;
   }
 
   closePaymentModal(): void {
     this.showPaymentModal = false;
+  }
+
+  validateForm(): boolean {
+    let isValid = true;
+    let errorMessage = '';
+
+    // Validar nombre completo
+    if (!this.formData.nombre_completo || this.formData.nombre_completo.trim() === '') {
+      errorMessage = 'Por favor, ingresa tu nombre completo';
+      isValid = false;
+    }
+    // Validar teléfono
+    else if (!this.isTelefonoValid()) {
+      errorMessage = this.telefonoError || 'Por favor, ingresa un número de teléfono válido';
+      isValid = false;
+    }
+    // Validar ubicación
+    else if (!this.formData.latitud || !this.formData.longitud) {
+      errorMessage = 'Por favor, selecciona una ubicación en el mapa';
+      isValid = false;
+    }
+
+    if (!isValid) {
+      this.showError(errorMessage);
+    }
+
+    return isValid;
+  }
+
+  showError(message: string) {
+    this.errorNotificationMessage = message;
+    this.showErrorNotification = true;
+    
+    // Auto-ocultar después de 4 segundos
+    setTimeout(() => {
+      this.showErrorNotification = false;
+    }, 4000);
   }
 
   selectQRPayment(): void {
@@ -113,6 +176,83 @@ export class FormDatosEnvio {
       }
     } catch (e) {
       this.router.navigate(['/order']);
+    }
+  }
+  ngAfterViewInit() {
+    this.initMap();
+  }
+
+  ngOnDestroy() {
+    if (this.map) {
+      this.map.remove();
+    }
+  }
+
+  initMap() {
+    // Crear mapa centrado en posición inicial
+    this.map = L.map('map').setView([this.lat, this.lng], this.zoom);
+
+    // Añadir capa de tiles (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(this.map);
+
+    // Crear marcador draggable
+    this.marker = L.marker([this.lat, this.lng], {
+      draggable: true
+    }).addTo(this.map);
+
+    // Evento cuando se arrastra el marcador
+    this.marker.on('dragend', () => {
+      const position = this.marker.getLatLng();
+      console.log('Dragend event:', position.lat, position.lng);
+      this.ngZone.run(() => {
+        this.updatePosition(position.lat, position.lng);
+        this.cdr.detectChanges();
+      });
+    });
+
+    // Evento click en el mapa
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+      //console.log('Click event:', lat, lng);
+      this.marker.setLatLng([lat, lng]);
+      this.ngZone.run(() => {
+        this.updatePosition(lat, lng);
+        this.cdr.detectChanges();
+      });
+    });
+  }
+
+  updatePosition(lat: number, lng: number) {
+    //console.log('updatePosition called:', lat, lng);
+    this.lat = lat;
+    this.lng = lng;
+    this.formData.latitud = lat;
+    this.formData.longitud = lng;
+    //console.log('formData updated:', this.formData.latitud, this.formData.longitud);
+  }
+
+  getUserLocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          this.lat = pos.coords.latitude;
+          this.lng = pos.coords.longitude;
+
+          // Actualizar mapa y marcador si ya están inicializados
+          if (this.map && this.marker) {
+            this.map.setView([this.lat, this.lng], this.zoom);
+            this.marker.setLatLng([this.lat, this.lng]);
+          }
+
+          // Guardar en formData
+          this.formData.latitud = this.lat;
+          this.formData.longitud = this.lng;
+        },
+        err => console.error("Error ubicacion:", err)
+      );
     }
   }
 }

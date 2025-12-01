@@ -52,19 +52,18 @@
         <!-- Información del Método de Pago -->
         <div class="bg-white rounded-2xl p-4 shadow-sm mb-4">
             <h3 class="text-base font-semibold text-gray-900 mb-3">Método de Pago</h3>
-            
+
             <div *ngIf="paymentMethod === 'qr'" class="flex items-center gap-3 text-yellow-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M12 4v16m8-8H4"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 <span class="font-medium">Pago con QR</span>
             </div>
-            
+
             <div *ngIf="paymentMethod === 'tarjeta'" class="flex items-center gap-3 text-green-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
                 <span class="font-medium">Pago con Tarjeta</span>
             </div>
@@ -99,8 +98,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17.657 16.657L13.414 12l4.243-4.243m-9.9 0L10.586 12l-4.243 4.243" />
                 </svg>
-                <div>
-                    <p class="font-medium text-gray-900">{{ pago.direccion }}</p>
+                <div class="flex-1">
+                    <button (click)="openLocationModal()"
+                        class="font-medium text-blue-600 hover:text-blue-700 underline">
+                        Ver ubicación
+                    </button>
                     <p class="text-sm text-gray-500">Dirección del envío</p>
                 </div>
             </div>
@@ -172,6 +174,48 @@
                 class="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition-colors">
                 Continuar
             </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Modal de ubicación -->
+@if (showLocationModal) {
+<div class="fixed inset-0 flex items-center justify-center p-4"
+    style="z-index: 9999; backdrop-filter: blur(8px); background-color: rgba(255, 255, 255, 0.7);">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+        <!-- Header del modal -->
+        <div class="bg-blue-600 text-white p-4">
+            <h2 class="text-lg font-semibold">Ubicación de Envío</h2>
+            <p class="text-sm text-blue-100 mt-1">Verifica o actualiza tu ubicación</p>
+        </div>
+
+        <!-- Contenido del modal -->
+        <div class="p-4">
+            <!-- Mapa -->
+            <div id="modalMap" class="w-full h-[300px] rounded-xl overflow-hidden shadow-sm mb-4"></div>
+
+            <!-- Coordenadas -->
+            <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                <p class="text-sm font-medium text-gray-700 mb-1">📍 Coordenadas:</p>
+                <p class="text-xs text-gray-600">Latitud: {{ tempLat?.toFixed(6) }}</p>
+                <p class="text-xs text-gray-600">Longitud: {{ tempLng?.toFixed(6) }}</p>
+            </div>
+
+            <p class="text-xs text-gray-500 mb-4">💡 Haz click en el mapa o arrastra el marcador para cambiar la
+                ubicación</p>
+
+            <!-- Botones -->
+            <div class="flex gap-3">
+                <button (click)="closeLocationModal()"
+                    class="flex-1 bg-gray-200 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-300 active:scale-95 transition-all">
+                    Cancelar
+                </button>
+                <button (click)="updateLocation()"
+                    class="flex-1 bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-all">
+                    Actualizar
+                </button>
+            </div>
         </div>
     </div>
 </div>
