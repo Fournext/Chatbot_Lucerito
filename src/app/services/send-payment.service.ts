@@ -14,7 +14,7 @@ export class SendPaymentService {
   public ordercod = signal<number | null>(null);
 
   createOrder(orderData: any) {
-    return this.http.post<any>(`${this.API}/orden/`, orderData).pipe(
+    return this.http.post<any>(`${this.API}/orden/crear-con-asignacion`, orderData).pipe(
       tap((response: any) => {
         this.ordercod.set(response.orden.cod ?? null);
       }) 
